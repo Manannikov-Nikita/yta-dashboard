@@ -16,10 +16,12 @@ ___
 
 https://user-images.githubusercontent.com/55488385/111140609-97e53600-8593-11eb-814a-afddf3412870.mp4
 
-**Known issues**
+**Known issues:** 
+
 1. Connection to API is unstable, each time app trys to update graph it requests data from api and user need to manualy authorize it. (Shown on the viedo)
 2. For some reason API cant respond data for few last days. I have tested this by API Explorer on official API documentation, so i dont think that it is my mistake. 
 
-**Time spent**
+**Time spent:**
+
 About 7 hours, including studying Youtube Analytics API, DASH framework, test video uploading and code writing.
  
