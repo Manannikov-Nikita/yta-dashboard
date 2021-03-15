@@ -1,2 +1,2 @@
 # yta-dashboard
-![alt text](https://sun9-61.userapi.com/impf/tv0EV3LhpicS3xhNcyrw5gRGc6kL5LudGUCBiw/xIF9ORPwYl8.jpg?size=2558x521&quality=96&sign=8530b2b22b18531c545875f9279b8f88&type=album)
+![alt text](https://sun9-45.userapi.com/impf/cE6pHLkCQXN5xzR0nJG9Pnp8rMeZhPU7wv8WLQ/LhSArXzd1Ns.jpg?size=1052x515&quality=96&sign=433c6c3b4145122c037784cba827ab37&type=album)
