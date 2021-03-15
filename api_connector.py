@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
+import pandas as pd
+import datetime as dt
 from pprint import pprint
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
@@ -14,6 +13,24 @@ SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
 API_SERVICE_NAME = 'youtubeAnalytics'
 API_VERSION = 'v2'
 CLIENT_SECRETS_FILE = 'secret.json'
+
+def json_to_df(response):
+
+  yta_report_df = pd.DataFrame()
+  date = []
+  views = []
+
+  for day in response['rows']:
+
+    proper_date = dt.datetime.strptime(day[0], '%Y-%m-%d')
+    date.append(proper_date)
+    views.append(day[1])
+
+  yta_report_df['date'] = date
+  yta_report_df['views'] = views
+
+  return yta_report_df
+
 def get_service():
   flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
   credentials = flow.run_console()
@@ -24,7 +41,8 @@ def execute_api_request(client_library_function, **kwargs):
     **kwargs
   ).execute()
 
-  pprint(response)
+  return json_to_df(response)
+
 
 if __name__ == '__main__':
   # Disable OAuthlib's HTTPs verification when running locally.
@@ -32,14 +50,15 @@ if __name__ == '__main__':
   os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
   youtubeAnalytics = get_service()
-  execute_api_request(
+  response = execute_api_request(
       youtubeAnalytics.reports().query,
       ids='channel==MINE',
       startDate='2021-03-11',
       endDate='2021-03-15',
-      metrics='views,comments,likes',
+      metrics='views',
       dimensions='day',
       sort='day',
       filters='video==wtQTwYX4dGc'
   )
 
+  json_to_df(response)

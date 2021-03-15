@@ -1,42 +1,18 @@
 import dash
-import random
-import datetime as dt
-from httplib2 import Response
-import pandas as pd 
+import os
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
-from pandas.io.formats import style
-from test import execute_api_request
-
+from api_connector import get_service, execute_api_request
 from dash.dependencies import Input, Output
 
-#Genertating a dake date-line
-date = []
+SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
 
-start = dt.datetime(2021, 3, 1)
-end = dt.datetime(2021, 4, 1)
-step = dt.timedelta(days=1)
-
-while start < end:
-    date.append(start)
-    start += step
-
-#Genrating fake views amount
-views = []
-
-for i in range(0, len(date)):
-    random_views = random.randint(1000, 3000)
-    views.append(random_views)
-
-date_x_views = pd.DataFrame()
-date_x_views['date'] = date
-date_x_views['views'] = views
+API_SERVICE_NAME = 'youtubeAnalytics'
+API_VERSION = 'v2'
+CLIENT_SECRETS_FILE = 'secret.json'
 
 app = dash.Dash(__name__)
-
-
-video_name = 'Nice video'
 
 app.layout = html.Div(
     children = [
@@ -44,38 +20,43 @@ app.layout = html.Div(
     dcc.DatePickerRange(
         id = 'date-picker',
         calendar_orientation = 'horizontal',
-        start_date = date[0],
-        end_date= date[-1]
+        start_date = '2021-03-01',
+        end_date= '2021-03-15'
     ),
 
-    dcc.Graph(id='Graph1', figure={}) 
+    dcc.Graph(id='views-graph', figure={}) 
     ]
 )
 
-
-
 @app.callback(
-    Output(component_id='Graph1', component_property='figure'),
+    Output(component_id='views-graph', component_property='figure'),
     [Input(component_id='date-picker', component_property='start_date'),
     Input(component_id='date-picker', component_property='end_date')]
 )
 
 def update_graph(start_date, end_date):
 
-    filtered_df = date_x_views.copy()
-    filtered_df = filtered_df.query(' @start_date <= date <= @end_date')
+    youtubeAnalytics = get_service()
+    date_x_views = execute_api_request(
+      youtubeAnalytics.reports().query,
+      ids='channel==MINE',
+      startDate=start_date,
+      endDate=end_date,
+      metrics='views',
+      dimensions='day',
+      sort='day',
+      filters='video==wtQTwYX4dGc'
+    )
 
     fig = px.bar(
-        data_frame = filtered_df,
+        data_frame = date_x_views,
         x='date',
         y='views',
-        template='plotly_dark',
-        labels={
-            'x':'TEST'
-        }
+        template='plotly_dark'
     )
 
     return fig
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
