@@ -4,7 +4,6 @@
 import os
 import pandas as pd
 import datetime as dt
-from pprint import pprint
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
@@ -42,23 +41,3 @@ def execute_api_request(client_library_function, **kwargs):
   ).execute()
 
   return json_to_df(response)
-
-
-if __name__ == '__main__':
-  # Disable OAuthlib's HTTPs verification when running locally.
-  # *DO NOT* leave this option enabled when running in production.
-  os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
-  youtubeAnalytics = get_service()
-  response = execute_api_request(
-      youtubeAnalytics.reports().query,
-      ids='channel==MINE',
-      startDate='2021-03-11',
-      endDate='2021-03-15',
-      metrics='views',
-      dimensions='day',
-      sort='day',
-      filters='video==wtQTwYX4dGc'
-  )
-
-  json_to_df(response)
