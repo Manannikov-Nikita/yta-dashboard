@@ -11,9 +11,10 @@ ___
 **Graph builded on generated(synth) data** 
 
 ![alt text](https://sun9-45.userapi.com/impf/cE6pHLkCQXN5xzR0nJG9Pnp8rMeZhPU7wv8WLQ/LhSArXzd1Ns.jpg?size=1052x515&quality=96&sign=433c6c3b4145122c037784cba827ab37&type=album)
+
 **Application run on a test youtube channel**
 
-(https://user-images.githubusercontent.com/55488385/111140609-97e53600-8593-11eb-814a-afddf3412870.mp4)
+https://user-images.githubusercontent.com/55488385/111140609-97e53600-8593-11eb-814a-afddf3412870.mp4
 
 **Known issues**
 1. Connection to API is unstable, each time app trys to update graph it requests data from api and user need to manualy authorize it. (Shown on the viedo)
